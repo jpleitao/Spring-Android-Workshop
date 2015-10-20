@@ -38,9 +38,11 @@ The application, as it is provided in this repository, has the following behavio
 
 1. Make sure you have internet connection
 2. Install **[Android Studio](http://developer.android.com/sdk/index.html#top)** (includes the Android SDK)
-2. Open this folder in Android Studio
-3. If required, install the SDK build tools for the required API Level (API 8, Froyo)
-4. Start your Android Emulator (The current application has been tested with the **[Genymotion Android Emulator](https://www.genymotion.com/#!/download)** but it should also work with the Android Virtual Device provided with Android Studio)
+3. Open this folder in Android Studio
+4. If required, install the SDK build tools for the required API Level (API 19, KitKat)
+5. Start your Android Emulator (The current application has been tested with the **[Genymotion Android Emulator](https://www.genymotion.com/#!/download)** but it should also work with the Android Virtual Device provided with Android Studio)
+6. If you are using the Android Studio's default emulator it is also required to either store some images in the phone's memory or use the emulator's camera to take some sample images. Please note that the images used should be of a small size (If possible, around 100 Kb or less)
+7. Run the application
 
 
 # Target Behaviour
