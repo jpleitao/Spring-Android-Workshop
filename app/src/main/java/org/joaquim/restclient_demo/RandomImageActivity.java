@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +14,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.joaquim.restclient_demo.server.RESTHandler;
+import org.joaquim.restclient_demo.server.RESTHandlerReturn;
+import org.joaquim.restclient_demo.utils.Utils;
+
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
 
 public class RandomImageActivity extends AppCompatActivity {
 
@@ -96,9 +102,62 @@ public class RandomImageActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Saves the selected image into the phone's memory
+     * @param view The activity view
+     */
     public void saveImage(View view) {
+        if (bitmapProcessed != null) {
+            MediaStore.Images.Media.insertImage(getContentResolver(), bitmapProcessed,
+                    bitmapProcessedTitle, "");
+        } else {
+            Utils.createToast(getApplicationContext(), "Could not save the image");
+        }
     }
 
     public void uploadImage(View view) {
+        RESTHandlerReturn result;
+        String memeText = memeTextView.getText().toString();
+        String drawablePath = getApplicationContext().getFilesDir().getPath() + "/" + drawableName;
+
+        bitmapProcessed = null;
+        bitmapProcessedTitle = null;
+
+        if (drawableName.length() == 0) {
+            // No image was selected
+            Utils.createToast(getApplicationContext(), "No image was selected");
+            return ;
+        } else if (memeText.length() == 0) {
+            // No meme text was assigned
+            Utils.createToast(getApplicationContext(), "Missing meme text");
+            return ;
+        }
+
+        try {
+            // Upload the file to the REST Service and get the processed image
+            RESTHandler restHandler = new RESTHandler(drawablePath);
+            result = restHandler.execute(memeText).get();
+
+            bitmapProcessed = result.getBitmap();
+            bitmapProcessedTitle = result.getBitmapTitle();
+
+        } catch (InterruptedException | ExecutionException e) {
+            // If there is an exception during the process just set the result variable to
+            // null, signalling that something went wrong
+            e.printStackTrace();
+            result = null;
+        }
+
+        if (result != null) {
+            if (result.getErrorMessage() == null) {
+                // If nothing went wrong simply apply the received bitmap
+                imageView1.setImageBitmap(result.getBitmap());
+            }else {
+                Utils.createToast(getApplicationContext(), result.getErrorMessage());
+            }
+        } else {
+            Utils.createToast(getApplicationContext(), "Exception while requesting the operation " +
+                    "to the server");
+        }
     }
 }
