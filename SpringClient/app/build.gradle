@@ -35,7 +35,7 @@ dependencies {
     // Include Spring library
     compile 'org.springframework.android:spring-android-rest-template:1.0.1.RELEASE'
     // Add Jackson dependencies
-    compile 'com.fasterxml.jackson.core:jackson-core:2.6.3'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.6.3'
-    compile 'com.fasterxml.jackson.core:jackson-annotations:2.6.3'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.9.7'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.7'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.9.7'
 }
